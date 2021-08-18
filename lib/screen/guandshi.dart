@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:letsgo/resources/addressjson.dart';
 import 'package:letsgo/resources/getLocation.dart';
 import 'package:letsgo/resources/timexml.dart';
@@ -17,6 +18,7 @@ class _GuAndShiState extends State<GuAndShi> {
     await mylocation.getLocation();
     String longi = mylocation.long;
     String latit = mylocation.lati;
+    String dateStr = DateFormat('yyyyMMdd').format(DateTime.now());
 
     AddressJson addressjson = AddressJson(
         "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=${longi}0,${latit}0&sourcecrs=epsg:4326&output=json");
@@ -29,12 +31,26 @@ class _GuAndShiState extends State<GuAndShi> {
     gusiandtime.add(si);
 
     TimeXml timexml = TimeXml(
-        'http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?ServiceKey=cR1YY2ji2HzxD35o6BnH7GgH46ViNYaXmUFWJ%2FKKXc%2BMYcZNA51AWWyKOPorXp8pHJ6gBLiaXzJ809NDVwgNSg%3D%3D&locdate=20210811&longitude=${longi}&latitude=${latit}&dnYn=Y');
+        'http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?ServiceKey=cR1YY2ji2HzxD35o6BnH7GgH46ViNYaXmUFWJ%2FKKXc%2BMYcZNA51AWWyKOPorXp8pHJ6gBLiaXzJ809NDVwgNSg%3D%3D&locdate=${dateStr}&longitude=${longi}&latitude=${latit}&dnYn=Y');
 
     var timeDataxml = await timexml.getXmlData();
     print(timeDataxml);
     var timeData = timeDataxml.toString().substring(9, 13);
-    gusiandtime.add(timeData);
+    String fs = timeData.substring(0, 2);
+    String bs = timeData.substring(2);
+    String fd = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    var noeulTime = fs + ':' + bs;
+
+    String noeulStr = fd + ' ' + noeulTime;
+    DateTime ndt = new DateFormat('yyyy-MM-dd HH:mm').parse(noeulStr);
+    Duration diff = ndt.difference(DateTime.now());
+    int lm = diff.inMinutes.toInt() + 1;
+    String km = lm.toString();
+
+    var leftNoeulTime = km;
+    gusiandtime.add(noeulTime);
+    gusiandtime.add(leftNoeulTime);
 
     return gusiandtime;
   }
@@ -79,6 +95,7 @@ class _GuAndShiState extends State<GuAndShi> {
                         String si = snapshot.data[1];
                         String gu = snapshot.data[0];
                         String time = snapshot.data[2];
+                        String leftTime = snapshot.data[3];
                         return Container(
                             alignment: Alignment.center,
                             child: Column(
@@ -101,7 +118,19 @@ class _GuAndShiState extends State<GuAndShi> {
                                     ),
                                   ],
                                 ),
-                                Text(time)
+                                Text(
+                                  time,
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                Text(
+                                  "노을까지 ${leftTime}분 남았습니다.",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                )
                               ],
                             ));
                       }
