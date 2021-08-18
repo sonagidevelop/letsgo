@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:letsgo/page.dart';
 import 'package:letsgo/resources/getLocation.dart';
+import 'package:letsgo/screen/vv.dart';
 
 void main() async {
-
   runApp(MyApp());
 }
 
@@ -14,12 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
-      home: PageMain(title: 'Flutter Demo Home Page'),
+      home: PageMain(
+        title: 'a',
+      ),
     );
   }
 }
-
-
