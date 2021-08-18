@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart' as az;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:intl/intl.dart';
 
@@ -29,9 +29,9 @@ class _MystatefulWidgetState extends State<MystatefulWidget> {
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  double? latitude2;
-  double? longitude2;
-  final _openweatherkey = 'a045afc7e3734446b7c0ec44595205fd';
+  // double? latitude2;
+  // double? longitude2;
+  // final _openweatherkey = 'a045afc7e3734446b7c0ec44595205fd';
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _MystatefulWidgetState extends State<MystatefulWidget> {
             ));
   }
 
-  Future _showNotificationAtTime() async {
+  void _showNotificationAtTime() async {
     var type = 'yyyy-MM-dd (E) a HH:mm:ss';
     var sunsetAlarmDate = DateFormat(type).format(DateTime.now());
     print(sunsetAlarmDate);
@@ -71,7 +71,7 @@ class _MystatefulWidgetState extends State<MystatefulWidget> {
     var ios = IOSNotificationDetails();
     var detail = NotificationDetails(android: android, iOS: ios);
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-        0, 'title', 'body', _setNotiTime(), detail,
+        0, '제목', '내용', _setNotiTime(), detail,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true,
@@ -79,7 +79,7 @@ class _MystatefulWidgetState extends State<MystatefulWidget> {
   }
 
   tz.TZDateTime _setNotiTime() {
-    tz.initializeTimeZones();
+    az.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
     final now = tz.TZDateTime.now(tz.local);
     var scheduledDate =
@@ -87,29 +87,29 @@ class _MystatefulWidgetState extends State<MystatefulWidget> {
     return scheduledDate;
   }
 
-  Future<void> getWeatherData({
-    @required String? lat,
-    @required String? lon,
-  }) async {
-    var str =
-        'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
-    print(str);
-    var response = await http.get(Uri.parse(str));
+  // Future<void> getWeatherData({
+  //   @required String? lat,
+  //   @required String? lon,
+  // }) async {
+  //   var str =
+  //       'http://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_openweatherkey&units=metric';
+  //   print(str);
+  //   var response = await http.get(Uri.parse(str));
 
-    if (response.statusCode == 200) {
-      var data = response.body;
-      var dataJson = jsonDecode(data);
-      print('data =$data');
-      print('${dataJson['main']['temp']}');
-      print('${dataJson['sys']['country']}');
-      print('${dataJson['name']}');
-      print('${dataJson['weather'][0]['main']}');
-      print('${dataJson['weather'][0]['description']}');
-      // var myJsondata = jsonDecode(data)['main']['temp'];
-      // print(myJsondata); 로도 쓸 수 있다.
-    } else
-      print('response status code = ${response.statusCode}');
-  }
+  //   if (response.statusCode == 200) {
+  //     var data = response.body;
+  //     var dataJson = jsonDecode(data);
+  //     print('data =$data');
+  //     print('${dataJson['main']['temp']}');
+  //     print('${dataJson['sys']['country']}');
+  //     print('${dataJson['name']}');
+  //     print('${dataJson['weather'][0]['main']}');
+  //     print('${dataJson['weather'][0]['description']}');
+  //     // var myJsondata = jsonDecode(data)['main']['temp'];
+  //     // print(myJsondata); 로도 쓸 수 있다.
+  //   } else
+  //     print('response status code = ${response.statusCode}');
+  // }
 
   @override
   Widget build(BuildContext context) {
