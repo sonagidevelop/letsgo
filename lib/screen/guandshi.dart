@@ -122,7 +122,7 @@ class _GuAndShiState extends State<GuAndShi> {
                                   time,
                                   style: TextStyle(
                                     fontSize: 40,
-                                    fontStyle: FontStyle.italic,
+                                    // fontStyle: FontStyle.italic,
                                   ),
                                 ),
                                 Text(
