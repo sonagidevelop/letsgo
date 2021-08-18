@@ -25,7 +25,7 @@ class _MyHomePageState extends State<PageMain> {
   @override
   void initState() {
     super.initState();
-    var androidSetting = AndroidInitializationSettings('app_icon');
+    var androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
     var iosSetting = IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
