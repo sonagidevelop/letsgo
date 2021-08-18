@@ -74,7 +74,7 @@ class _MyHomePageState extends State<PageMain> {
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
     final now = tz.TZDateTime.now(tz.local);
     var scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, 13, 22);
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, 15, 55);
     return scheduledDate;
   }
 
