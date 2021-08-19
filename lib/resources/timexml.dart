@@ -11,6 +11,8 @@ class TimeXml {
     http.Response response = await http.get(Uri.parse(url));
     var xmlData = XmlDocument.parse(response.body);
     var parsingData = xmlData.findAllElements('sunset');
-    return parsingData;
+    var sunriseData = xmlData.findAllElements('sunrise');
+    List allData = [parsingData, sunriseData];
+    return allData;
   }
 }

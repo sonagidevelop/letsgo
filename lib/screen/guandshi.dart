@@ -1,16 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:letsgo/resources/addressjson.dart';
 import 'package:letsgo/resources/getLocation.dart';
 import 'package:letsgo/resources/timexml.dart';
 import 'package:letsgo/ttutils/ttgetlocation.dart';
+import 'package:timer_builder/timer_builder.dart';
 
 class GuAndShi extends StatefulWidget {
   @override
   _GuAndShiState createState() => _GuAndShiState();
 }
 
+class ClockWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TimerBuilder.periodic(
+      Duration(minutes: 1),
+      builder: (context) {
+        return Text("${DateTime.now()}");
+      },
+    );
+  }
+}
+
 class _GuAndShiState extends State<GuAndShi> {
+  get dateTime => null;
+
   Future<List> getmyLocation() async {
     List gusiandtime = [];
 
@@ -35,22 +52,68 @@ class _GuAndShiState extends State<GuAndShi> {
 
     var timeDataxml = await timexml.getXmlData();
     print(timeDataxml);
-    var timeData = timeDataxml.toString().substring(9, 13);
+    var timeData = timeDataxml.toString().substring(10, 14);
+    var riseTimeData = timeDataxml.toString().substring(38, 42);
     String fs = timeData.substring(0, 2);
     String bs = timeData.substring(2);
+    String rfs = riseTimeData.substring(0, 2);
+    String rbs = riseTimeData.substring(2);
     String fd = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     var noeulTime = fs + ':' + bs;
+    var riseTime = rfs + ':' + rbs;
 
     String noeulStr = fd + ' ' + noeulTime;
+    String riseStr = fd + ' ' + riseTime;
     DateTime ndt = new DateFormat('yyyy-MM-dd HH:mm').parse(noeulStr);
-    Duration diff = ndt.difference(DateTime.now());
-    int lm = diff.inMinutes.toInt() + 1;
-    String km = lm.toString();
+    DateTime rdt = new DateFormat('yyyy-MM-dd HH:mm').parse(riseStr);
 
-    var leftNoeulTime = km;
+    Duration diff = ndt.difference(DateTime.now());
+    Duration diffRise = rdt.difference(DateTime.now());
+    int lm = diff.inMinutes.toInt() + 1;
+    int rlm = diffRise.inMinutes.toInt();
+    Timer(Duration(minutes: 1), () {
+      setState(() {
+        if (lm > 0) {
+          lm--;
+        } else {
+          lm;
+        }
+      });
+    });
+    String km = lm.toString();
+    String rkm = rlm.toString();
+    String getTimeString(int value) {
+      final int hour = value ~/ 60;
+      final int minutes = value % 60;
+      return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
+    }
+
+    String nlt = getTimeString(lm);
+    String rlt = getTimeString(rlm);
+
+    // TimerBuilder _timerBuilder;
+
+    // _timerBuilder =
+    //     TimerBuilder.periodic(Duration(minutes: 1), builder: (context) {
+    //   setState(() {
+    //     if (lm > 0) {
+    //       lm--;
+    //     } else {
+    //       "";
+    //     }
+    //   });
+    //   return Text(nlt);
+    // });
+
+    var leftNoeulTime = nlt;
+    var leftRiseTime = rlt;
     gusiandtime.add(noeulTime);
     gusiandtime.add(leftNoeulTime);
+    gusiandtime.add(leftRiseTime);
+    gusiandtime.add(riseTime);
+
+    // gusiandtime.add(diff);
 
     return gusiandtime;
   }
@@ -96,10 +159,18 @@ class _GuAndShiState extends State<GuAndShi> {
                         String gu = snapshot.data[0];
                         String time = snapshot.data[2];
                         String leftTime = snapshot.data[3];
+                        String leftRiseTime = snapshot.data[4];
+                        String riseTime = snapshot.data[5];
+                        // DateTime testTime = snapshot.data[5];
+
                         return Container(
                             alignment: Alignment.center,
                             child: Column(
                               children: [
+                                // TimerBuilder.periodic(Duration(minutes: 1),
+                                //     builder: (context) {
+                                //   return Text("${dateTime.now()}");
+                                // }),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -119,7 +190,14 @@ class _GuAndShiState extends State<GuAndShi> {
                                   ],
                                 ),
                                 Text(
-                                  time,
+                                  "sunset $time",
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                Text(
+                                  "sunrise $riseTime",
                                   style: TextStyle(
                                     fontSize: 40,
                                     fontStyle: FontStyle.italic,
@@ -130,11 +208,22 @@ class _GuAndShiState extends State<GuAndShi> {
                                   style: TextStyle(
                                     fontSize: 20,
                                   ),
-                                )
+                                ),
+                                Text(
+                                  "일출까지 ${leftRiseTime}분 남았습니다.",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                // TimerBuilder.periodic(
+                                //     const Duration(minutes: -1),
+                                //     builder: (context) {
+                                //   return Text("$testTime");
+                                // })
                               ],
                             ));
                       }
-                    })
+                    }),
               ],
             ),
           )),

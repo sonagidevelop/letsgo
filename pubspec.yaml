@@ -36,6 +36,7 @@ dependencies:
   http: ^0.13.3
   naver_map_plugin: ^0.9.6
   flutter_local_notifications: ^8.0.0
+  timer_builder: ^2.0.0
 
 
 
