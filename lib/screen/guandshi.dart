@@ -78,8 +78,9 @@ class _GuAndShiState extends State<GuAndShi> {
                       //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                       if (snapshot.hasData == false) {
                         return Container(
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator());
+                          alignment: Alignment.center,
+                          // child: CircularProgressIndicator()
+                        );
                       }
                       //error가 발생하게 될 경우 반환하게 되는 부분
                       else if (snapshot.hasError) {
@@ -124,8 +125,16 @@ class _GuAndShiState extends State<GuAndShi> {
                                 ),
                                 Text(" "),
                                 Text(
-                                  "오늘 노을이 지는 시간 ${time}",
+                                  "오늘 노을이 지는 시간",
                                   style: TextStyle(
+                                    fontSize: 25,
+                                    // fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                Text(
+                                  "${time}",
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
                                     fontSize: 25,
                                     // fontStyle: FontStyle.italic,
                                   ),
