@@ -25,7 +25,10 @@ class _MyHomePageState extends State<PageMain> {
   @override
   void initState() {
     super.initState();
-    var androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+
+    var androidSetting = AndroidInitializationSettings("@mipmap/ic_launcher");
+
     var iosSetting = IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -74,7 +77,9 @@ class _MyHomePageState extends State<PageMain> {
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
     final now = tz.TZDateTime.now(tz.local);
     var scheduledDate =
+
         tz.TZDateTime(tz.local, now.year, now.month, now.day, 15, 55);
+
     return scheduledDate;
   }
 

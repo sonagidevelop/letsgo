@@ -140,7 +140,10 @@ class _GuAndShiState extends State<GuAndShi> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                       if (snapshot.hasData == false) {
-                        return CircularProgressIndicator();
+                        return Container(
+                          alignment: Alignment.center,
+                          // child: CircularProgressIndicator()
+                        );
                       }
                       //error가 발생하게 될 경우 반환하게 되는 부분
                       else if (snapshot.hasError) {
@@ -164,6 +167,7 @@ class _GuAndShiState extends State<GuAndShi> {
                         // DateTime testTime = snapshot.data[5];
 
                         return Container(
+                            padding: EdgeInsets.all(30),
                             alignment: Alignment.center,
                             child: Column(
                               children: [
@@ -181,6 +185,7 @@ class _GuAndShiState extends State<GuAndShi> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(" "),
+                                    Text(" "),
                                     Text(
                                       gu,
                                       style: TextStyle(
@@ -189,7 +194,16 @@ class _GuAndShiState extends State<GuAndShi> {
                                     ),
                                   ],
                                 ),
+                                Text(" "),
                                 Text(
+                                  "오늘 노을이 지는 시간",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    // fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                Text(
+
                                   "sunset $time",
                                   style: TextStyle(
                                     fontSize: 40,
@@ -198,13 +212,18 @@ class _GuAndShiState extends State<GuAndShi> {
                                 ),
                                 Text(
                                   "sunrise $riseTime",
+
+                                 
+
                                   style: TextStyle(
-                                    fontSize: 40,
-                                    fontStyle: FontStyle.italic,
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 25,
+                                    // fontStyle: FontStyle.italic,
                                   ),
                                 ),
+                                Text(" "),
                                 Text(
-                                  "노을까지 ${leftTime}분 남았습니다.",
+                                  "${leftTime}분 남았습니다",
                                   style: TextStyle(
                                     fontSize: 20,
                                   ),
